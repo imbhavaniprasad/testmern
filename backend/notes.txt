@@ -1,0 +1,57 @@
+dont add ; for env vars;
+to start server, use dotenv and config it;
+to start database connection,connect mongodb uri and trigger that function (her we exported a function
+in database.js and triggered that from server.js);
+To create a datatype for which you want to add object id
+of some other model/schema use like this:
+owner : {
+    type : mongoose.Schema.Types.ObjectId,
+    ref : "User"
+}
+---------
+if you add select : false for a var in a model, that wont be 
+visible in response of an api;
+
+once we create route, now to use it make sure you add that in app.js and
+better to use use from express() with default uri and to do 
+these, we have to use json and urlencoded like app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+-------
+to encrypt password: install bcrypt, jsonwebtoken
+----
+we can write methods for schemas ex: userSchema.methods.methodName;
+------
+get jwt token: return jwt.sign({ _id: this._id }, process.env.JWT_SECRET);
+-----
+we use select = false for password but for verifying or applying 
+functions on the password, we need it to be visible so we get that by 
+const user = await User.findOne({ email }).select("+password");
+---
+to make use of cookies, we need to install cookie-parser and import it like
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+-
+To display whole data of a modal with an id in the response
+use populate like this:
+await User.findById(req.user._id).populate("following");
+and to get only posts of that user in the response do this:
+await User.findById(req.user._id).populate("following","posts");
+-------
+To create a random token with some cryptography applied use crypto module
+which is inbuilt module so import it and generate token
+ex: const resetToken = crypto.randomBytes(20).toString("hex");
+and now  apply sha256 like this : this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+---------
+create reset url : const resetUrl = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetPasswordToken}`;
+----
+to make use of email use nodeemailer, install it;
+----
+We can use gmail service ports for sending mails since
+gmail follow many rules we are using mail trap here;
+-------
+unhash the created token :  crypto.createHash("sha256").
+            update(req.params.token).digest("hex");
+            ----------
+to store images,we use cloudinary here, import it in server.js
+-
+to extend the upload limit of any image from frontend, we can do such by modifying app.use(express.json({limit:'xmb'}));
